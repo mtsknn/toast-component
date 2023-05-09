@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 
 import Button from '../Button';
-import Toast, { TOAST_VARIANTS } from '../Toast';
+import { TOAST_VARIANTS } from '../Toast';
 
 import styles from './ToastPlayground.module.css';
+import ToastShelf from '../ToastShelf/ToastShelf';
 
 function ToastPlayground() {
   const [message, setMessage] = useState('');
   const [variant, setVariant] = useState(TOAST_VARIANTS[0]);
 
-  const [showToast, setShowToast] = useState(false);
+  const [toasts, setToasts] = useState([]);
+  const addToast = (toast) => setToasts((prev) => prev.concat(toast));
+  const dismissToast = (id) =>
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const toast = {
+      id: crypto.randomUUID(),
+      message: formData.get('message'),
+      variant: formData.get('variant'),
+    };
+    addToast(toast);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -18,19 +33,9 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {showToast && (
-        <Toast onDismiss={() => setShowToast(false)} variant={variant}>
-          {message}
-        </Toast>
-      )}
+      <ToastShelf dismiss={dismissToast} toasts={toasts} />
 
-      <form
-        className={styles.controlsWrapper}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setShowToast(true);
-        }}
-      >
+      <form className={styles.controlsWrapper} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -43,7 +48,9 @@ function ToastPlayground() {
             <textarea
               className={styles.messageInput}
               id="message"
+              name="message"
               onChange={(event) => setMessage(event.target.value)}
+              required
               value={message}
             />
           </div>
