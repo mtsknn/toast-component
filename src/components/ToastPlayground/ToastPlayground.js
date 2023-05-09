@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 
 import Button from '../Button';
+import Toast, { TOAST_VARIANTS } from '../Toast';
 
 import styles from './ToastPlayground.module.css';
 
-const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
-
 function ToastPlayground() {
   const [message, setMessage] = useState('');
-  const [variant, setVariant] = useState(VARIANT_OPTIONS[0]);
+  const [variant, setVariant] = useState(TOAST_VARIANTS[0]);
+
+  const [showToast, setShowToast] = useState(false);
 
   return (
     <div className={styles.wrapper}>
@@ -17,7 +18,19 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <div className={styles.controlsWrapper}>
+      {showToast && (
+        <Toast onDismiss={() => setShowToast(false)} variant={variant}>
+          {message}
+        </Toast>
+      )}
+
+      <form
+        className={styles.controlsWrapper}
+        onSubmit={(e) => {
+          e.preventDefault();
+          setShowToast(true);
+        }}
+      >
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -39,7 +52,7 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            {VARIANT_OPTIONS.map((variantType) => {
+            {TOAST_VARIANTS.map((variantType) => {
               const id = `variant-${variantType}`;
               return (
                 <label htmlFor={id} key={variantType}>
@@ -64,7 +77,7 @@ function ToastPlayground() {
             <Button>Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
