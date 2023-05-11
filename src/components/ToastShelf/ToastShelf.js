@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Toast from '../Toast';
 import styles from './ToastShelf.module.css';
 import { useToasts } from '../ToastProvider';
 
 function ToastShelf() {
-  const { dismissToast, toasts } = useToasts();
+  const { dismissAllToasts, dismissToast, toasts } = useToasts();
+
+  useEffect(() => {
+    const listener = (event) => {
+      if (event.code === 'Escape') {
+        dismissAllToasts();
+      }
+    };
+
+    window.addEventListener('keydown', listener);
+
+    return () => {
+      window.removeEventListener('keydown', listener);
+    };
+  }, [dismissAllToasts]);
 
   if (toasts.length === 0) {
     return null;

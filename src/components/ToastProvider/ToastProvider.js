@@ -13,12 +13,17 @@ export default function ToastProvider({ children }) {
     };
     setToasts((prev) => prev.concat(toast));
   }, []);
+  const dismissAllToasts = useCallback(() => {
+    setToasts([]);
+  }, []);
   const dismissToast = useCallback((id) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
   return (
-    <ToastContext.Provider value={{ toasts, addToast, dismissToast }}>
+    <ToastContext.Provider
+      value={{ addToast, dismissAllToasts, dismissToast, toasts }}
+    >
       {children}
     </ToastContext.Provider>
   );
