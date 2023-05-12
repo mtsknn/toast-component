@@ -1,5 +1,13 @@
 # Toast Component Project
 
+- [x] Exercise 1
+- [x] Exercise 2
+- [x] Exercise 3
+- [x] Exercise 4
+- [x] Exercise 5.1
+- [x] Exercise 5.2
+- [x] Exercise 6
+
 ## Joy of React, Project II
 
 In this project, we'll dive deep into the implementation of a single common UI component: A `<Toast>` message component.
