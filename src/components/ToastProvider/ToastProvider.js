@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
+import useEscapeKey from '../../hooks/useEscapeKey';
 
 const ToastContext = createContext();
 
@@ -19,6 +20,10 @@ export default function ToastProvider({ children }) {
   const dismissToast = useCallback((id) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
+
+  // Feels weird to have this here
+  // but that's what Exercise 6 instructions said
+  useEscapeKey(dismissAllToasts);
 
   return (
     <ToastContext.Provider
